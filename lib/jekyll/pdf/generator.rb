@@ -3,7 +3,7 @@ module Jekyll
     class Generator < Jekyll::Generator
       safe true
       priority :lowest
-  
+
       def generate(site)
         # Loop through pages & documents and build PDFs
         [site.pages, site.documents].each do |items|
@@ -12,7 +12,7 @@ module Jekyll
           end
         end
       end
-      
+
     end
   end
 end

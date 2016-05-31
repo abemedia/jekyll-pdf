@@ -99,7 +99,7 @@ For asset URLs in CSS files we recommend creating a separate CSS file overriding
 
 ## To Do
 
-- Remove dependencies for ActiveSupport & PDFKit
+- Remove PDFKit Dependency
 - Write tests (rspec)
 - Package default PDF layout file in Gem
 - Support layouts in partials
