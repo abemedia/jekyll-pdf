@@ -1,5 +1,5 @@
 Gem::Specification.new do |spec|
-  spec.version = "0.1.2"
+  spec.version = "0.1.3"
   spec.homepage = "http://github.com/abemedia/jekyll-pdf/"
   spec.authors = ["Adam Bouqdib"]
   spec.email = ["adam@abemedia.co.uk"]

@@ -5,6 +5,7 @@ module Jekyll
   module PDF
     class Partial
       extend Forwardable
+      include Helper
 
       attr_accessor :doc
       attr_accessor :partial
@@ -76,6 +77,7 @@ module Jekyll
         tempfile = File.absolute_path(File.join(dir, id))
         unless File.exist?(tempfile)
           FileUtils.mkdir_p(File.dirname(tempfile)) unless File.exist?(File.dirname(tempfile))
+          fix_relative_paths
           File.open(tempfile, 'w') {|f| f.write(to_s) }
         end
         @output = tempfile
