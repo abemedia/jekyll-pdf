@@ -1,4 +1,5 @@
 require 'pdfkit'
+require File.dirname(__FILE__) + '/helper.rb'
 
 module Jekyll
   module PDF
@@ -9,8 +10,8 @@ module Jekyll
         @site = site
         @base = base
         @dir = File.dirname(page.url)
-        @name = File.basename(page.url, File.extname(page.url)) + ".pdf"
-        @settings = site.config['pdf'].clone || {}
+        @name = File.basename(page.url, File.extname(page.url)) + '.pdf'
+        @settings = site.config.key?('pdf') ? site.config['pdf'].clone : {}
         @partials = ['cover','header_html','footer_html']
 
         self.process(@name)
@@ -40,7 +41,6 @@ module Jekyll
       end
 
       # Recursively merge settings from the page, layout, site config & jekyll-pdf defaults
-      # todo: use jekyll's merge function
       def getConfig(data)
         settings = data['pdf'].is_a?(Hash) ? data['pdf'] : {}
         layout = @site.layouts[data['layout']].data.clone if data['layout'] != nil
@@ -55,6 +55,8 @@ module Jekyll
         return self.getConfig(layout)
       end
 
+      # Write the PDF file
+      # todo: remove pdfkit dependency
       def write(dest_prefix, dest_suffix = nil)
         self.render(@site.layouts, @site.site_payload) if self.output == nil
 
@@ -73,12 +75,13 @@ module Jekyll
         File.open("#{path}.html", 'w') {|f| f.write(self.output) } if @settings["debug"]
         @settings.delete("debug")
 
+        # Trigger post-write so jekyll-assets builds assets required for the PDF
+        Jekyll::Hooks.trigger hook_owner, :post_write, self
+
         # Build PDF file
         fix_relative_paths
         kit = PDFKit.new(self.output, @settings)
         file = kit.to_file(path)
-
-        #self.output = kit.to_pdf
       end
 
       def layout()

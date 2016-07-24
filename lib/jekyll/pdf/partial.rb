@@ -1,5 +1,6 @@
 require 'tmpdir'
 require 'digest/md5'
+require File.dirname(__FILE__) + '/helper.rb'
 
 module Jekyll
   module PDF
