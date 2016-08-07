@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Jekyll-pdf by abeMedia</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Jekyll-pdf</h1>
+      <h2 class="project-tagline">Create PDFs from Jekyll pages &amp; documents.</h2>
+      <a href="https://github.com/abeMedia/jekyll-pdf" class="btn">View on GitHub</a>
+      <a href="https://github.com/abeMedia/jekyll-pdf/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/abeMedia/jekyll-pdf/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="jekyll-pdf" class="anchor" href="#jekyll-pdf" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Jekyll PDF</h1>
+
+<p>Dynamically generate PDFs from Jekyll pages, posts &amp; documents.</p>
+
+<p><a href="https://travis-ci.org/abeMedia/jekyll-pdf"><img src="https://travis-ci.org/abeMedia/jekyll-pdf.svg?branch=master" alt="Build Status"></a>
+<a href="https://gemnasium.com/github.com/abeMedia/jekyll-pdf"><img src="https://gemnasium.com/badges/github.com/abeMedia/jekyll-pdf.svg" alt="Dependency Status"></a></p>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>Add <code>gem "jekyll-pdf"</code> to your <code>Gemfile</code> and run <code>bundle</code>, then add <code>jekyll-pdf</code> to your <code>_config.yml</code> like so:</p>
+
+<div class="highlight highlight-source-yaml"><pre><span class="pl-s"><span class="pl-ent">gems:</span></span>
+  <span class="pl-s">- <span class="pl-s">jekyll-pdf</span></span></pre></div>
+
+<p>Now add <code>pdf: true</code> to any page's or document's front-matter, that you'd like to create a PDF version of.</p>
+
+<p>To activate <strong>Jekyll PDF</strong> for multiple pages or entire collections you can use Jekyll's <a href="https://jekyllrb.com/docs/configuration/#front-matter-defaults">front-matter defaults</a>. The following example will create PDFs for each post in your blog.</p>
+
+<div class="highlight highlight-source-yaml"><pre><span class="pl-s"><span class="pl-ent">defaults:</span></span>
+  <span class="pl-s">-</span>
+    <span class="pl-s"><span class="pl-ent">scope:</span></span>
+      <span class="pl-s"><span class="pl-ent">path:</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span></span>
+      <span class="pl-s"><span class="pl-ent">type:</span> <span class="pl-s"><span class="pl-pds">"</span>posts<span class="pl-pds">"</span></span></span>
+    <span class="pl-s"><span class="pl-ent">values:</span></span>
+      <span class="pl-s"><span class="pl-ent">pdf:</span> <span class="pl-c1">true</span></span></pre></div>
+
+<p>Link to the PDF using the <code>{{ page.pdf_url }}</code> liquid variable.</p>
+
+<h2>
+<a id="configuration" class="anchor" href="#configuration" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Configuration</h2>
+
+<p><strong>Jekyll PDF</strong> supports any configuration parameters <a href="http://wkhtmltopdf.org/">wkhtmltopdf</a> does. For a full list of configuration parameters it supports see <a href="http://wkhtmltopdf.org/usage/wkhtmltopdf.txt">http://wkhtmltopdf.org/usage/wkhtmltopdf.txt</a></p>
+
+<div class="highlight highlight-source-yaml"><pre><span class="pl-s"><span class="pl-ent">pdf:</span></span>
+  <span class="pl-s"><span class="pl-ent">cache:</span> <span class="pl-s">false | directory | default: .asset-cache</span></span>
+  <span class="pl-s"><span class="pl-ent">page_size:</span> <span class="pl-s">A4, Letter, etc. | default: A4</span></span>
+  <span class="pl-s"><span class="pl-ent">layout:</span> <span class="pl-s">layout | default: pdf</span></span></pre></div>
+
+<p>All configuration parameters (with exception of <code>cache</code>) can be overridden from your page's or it's PDF layout's front-matter.</p>
+
+<h3>
+<a id="cache-folder" class="anchor" href="#cache-folder" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Cache Folder</h3>
+
+<p>If Jekyll Assets is installed, Jekyll PDF will automatically use the same cache folder as Jekyll Assets (unless specified otherwise).</p>
+
+<h2>
+<a id="layouts" class="anchor" href="#layouts" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Layouts</h2>
+
+<p><strong>Jekyll PDF</strong> will check for your current layout suffixed with <code>_pdf</code> e.g. if you're using a layout called <code>post</code>, it will look for <code>_layouts/post_pdf.html</code>, falling back to your default PDF layout (usually <code>_layouts/pdf.html</code>). </p>
+
+<p>To override this behaviour, add the <code>pdf_layout</code> variable to your page's YAML front-matter. For example:</p>
+
+<div class="highlight highlight-source-yaml"><pre><span class="pl-s"><span class="pl-ent">pdf_layout:</span> <span class="pl-s">my_custom_pdf_layout</span></span></pre></div>
+
+<h2>
+<a id="partials-header-footer--cover-page" class="anchor" href="#partials-header-footer--cover-page" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Partials (Header, Footer &amp; Cover Page)</h2>
+
+<p>We'll automatically look for all partials in <code>_includes</code> directory, e.g. <code>header_html: pdf_header.html</code> will tell Jekyll PDF use <code>_includes/pdf_header.html</code>. </p>
+
+<p>Please note that wkhtmltopdf requires all partials to be valid HTML documents for example:</p>
+
+<div class="highlight highlight-text-html-basic"><pre>&lt;!DOCTYPE html&gt;
+&lt;<span class="pl-ent">html</span>&gt;
+&lt;<span class="pl-ent">head</span>&gt;
+  &lt;<span class="pl-ent">meta</span> <span class="pl-e">charset</span>=<span class="pl-s"><span class="pl-pds">"</span>utf-8<span class="pl-pds">"</span></span> /&gt;
+  &lt;<span class="pl-ent">link</span> <span class="pl-e">rel</span>=<span class="pl-s"><span class="pl-pds">"</span>stylesheet<span class="pl-pds">"</span></span> <span class="pl-e">href</span>=<span class="pl-s"><span class="pl-pds">"</span>https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.css<span class="pl-pds">"</span></span>&gt;
+&lt;/<span class="pl-ent">head</span>&gt;
+&lt;<span class="pl-ent">body</span>&gt;
+  Page {{ page.pdf.page }} of {{ page.pdf.topage }}
+&lt;/<span class="pl-ent">body</span>&gt;
+&lt;/<span class="pl-ent">html</span>&gt;</pre></div>
+
+<h3>
+<a id="supported-header--footer-variables" class="anchor" href="#supported-header--footer-variables" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Supported header &amp; footer variables</h3>
+
+<table>
+<thead>
+<tr>
+<th>Liquid</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>{{ page.pdf.page }}</code></td>
+<td>Replaced by the number of the pages currently being printed</td>
+</tr>
+<tr>
+<td><code>{{ page.pdf.topage }}</code></td>
+<td>Replaced by the number of the last page to be printed</td>
+</tr>
+<tr>
+<td><code>{{ page.pdf.section }}</code></td>
+<td>Replaced by the content of the current h1 tag</td>
+</tr>
+<tr>
+<td><code>{{ page.pdf.subsection }}</code></td>
+<td>Replaced by the content of the current h2 tag</td>
+</tr>
+<tr>
+<td><code>{{ page.pdf.subsubsection }}</code></td>
+<td>Replaced by the content of the current h3 tag</td>
+</tr>
+</tbody>
+</table>
+
+<h2>
+<a id="troubleshooting" class="anchor" href="#troubleshooting" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Troubleshooting</h2>
+
+<h3>
+<a id="images-arent-displaying-in-the-pdf" class="anchor" href="#images-arent-displaying-in-the-pdf" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Images aren't displaying in the PDF</h3>
+
+<p>If your images aren't displaying in the PDF, this is most likely due to the fact that wkhtmltopdf doesn't know where to look. Try prefixing your image URLs with <code>file://{{ site.dest }}</code>.<br>
+For asset URLs in CSS files we recommend creating a separate CSS file overriding the URLs with the prefix mentioned above.</p>
+
+<hr>
+
+<h2>
+<a id="to-do" class="anchor" href="#to-do" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>To Do</h2>
+
+<ul>
+<li>Remove PDFKit Dependency</li>
+<li>Write tests (rspec)</li>
+<li>Package default PDF layout file in Gem</li>
+<li>Support layouts in partials</li>
+</ul>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/abeMedia/jekyll-pdf">Jekyll-pdf</a> is maintained by <a href="https://github.com/abeMedia">abeMedia</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
