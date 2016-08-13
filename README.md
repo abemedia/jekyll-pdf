@@ -95,11 +95,7 @@ Please note that wkhtmltopdf requires all partials to be valid HTML documents fo
 If your images aren't displaying in the PDF, this is most likely due to the fact that wkhtmltopdf doesn't know where to look. Try prefixing your image URLs with `file://{{ site.dest }}`.  
 For asset URLs in CSS files we recommend creating a separate CSS file overriding the URLs with the prefix mentioned above.
 
----
 
-## To Do
+## Copyright
 
-- Remove PDFKit Dependency
-- Write tests (rspec)
-- Package default PDF layout file in Gem
-- Support layouts in partials
+&copy; 2016 Adam Bouqdib - http://abemedia.co.uk
