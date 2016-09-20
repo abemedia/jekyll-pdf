@@ -75,9 +75,6 @@ module Jekyll
         File.open("#{path}.html", 'w') {|f| f.write(self.output) } if @settings["debug"]
         @settings.delete("debug")
 
-        # Trigger post-write so jekyll-assets builds assets required for the PDF
-        Jekyll::Hooks.trigger hook_owner, :post_write, self
-
         # Build PDF file
         fix_relative_paths
         kit = PDFKit.new(self.output, @settings)

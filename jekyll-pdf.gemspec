@@ -1,17 +1,17 @@
 Gem::Specification.new do |spec|
-  spec.version = "0.1.6a"
-  spec.homepage = "http://github.com/abemedia/jekyll-pdf/"
-  spec.authors = ["Adam Bouqdib"]
-  spec.email = ["adam@abemedia.co.uk"]
-  spec.files = %W(Gemfile README.md LICENSE) + Dir["lib/**/*"]
-  spec.summary = "PDF generator for Jekyll"
-  spec.name = "jekyll-pdf"
-  spec.license = "GPL-3.0"
-  spec.has_rdoc = false
+  spec.name          = "jekyll-pdf"
+  spec.version       = "0.1.6"
+  spec.summary       = "A PDF generator for Jekyll"
+  spec.description   = "A Jekyll plugin for generating PDFs from your pages, posts & documents."
+
+  spec.license       = "GPL-3.0"
+  spec.homepage      = "http://github.com/abemedia/jekyll-pdf/"
+  spec.authors       = ["Adam Bouqdib"]
+  spec.email         = ["adam@abemedia.co.uk"]
+
+  spec.files         = `git ls-files`.split($/)
+  spec.has_rdoc      = false
   spec.require_paths = ["lib"]
-  spec.description = spec.description = <<-DESC
-    A Jekyll plugin, that allows you to create PDF versions of your pages & documents.
-  DESC
 
   spec.add_runtime_dependency "wkhtmltopdf-installer", "~> 0.12"
   spec.add_runtime_dependency "pdfkit", "~> 0.8"

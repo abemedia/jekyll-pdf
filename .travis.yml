@@ -1,7 +1,7 @@
 language: ruby
 cache: bundler
 sudo: false
-  
+
 #
 
 rvm:
@@ -26,8 +26,8 @@ notifications:
 
 #
 
-branches:
-  only:
-    - master
-
-#
+deploy:
+  provider: rubygems
+  api_key: $RUBYGEMS_KEY
+  on:
+    tags: true
