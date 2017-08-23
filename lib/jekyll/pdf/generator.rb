@@ -6,7 +6,7 @@ module Jekyll
 
       def generate(site)
         # Loop through pages & documents and build PDFs
-        [site.pages, site.documents].each do |items|
+        [site.pages.clone, site.documents].each do |items|
           items.each do |item|
             site.pages << Document.new(site, site.source, item) if item.data['pdf']
           end
