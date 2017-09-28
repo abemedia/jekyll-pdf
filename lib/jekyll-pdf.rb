@@ -1,1 +1,1 @@
-require "jekyll/pdf"
+require 'jekyll/pdf'

@@ -15,7 +15,7 @@ module Jekyll
       attr_writer   :output
 
       def_delegators :@doc, :site, :name, :ext, :relative_path, :extname,
-                            :render_with_liquid?, :collection, :related_posts
+                     :render_with_liquid?, :collection, :related_posts
 
       # Initialize this Partial instance.
       #
@@ -33,19 +33,18 @@ module Jekyll
       # Returns Hash of doc data
       def data
         @data ||= doc.data.dup
-        @data.delete("layout")
+        @data.delete('layout')
         @data
       end
 
-      def trigger_hooks(*)
-      end
+      def trigger_hooks(*); end
 
       def path
         File.join(doc.path, partial)
       end
 
       def id
-        File.basename(path, File.extname(path)) + "-" + Digest::MD5.hexdigest(to_s) + File.extname(path)
+        File.basename(path, File.extname(path)) + '-' + Digest::MD5.hexdigest(to_s) + File.extname(path)
       end
 
       # Returns the cache directory
@@ -66,7 +65,7 @@ module Jekyll
 
       # Returns the shorthand String identifier of this doc.
       def inspect
-        "<Partial: #{self.id}>"
+        "<Partial: #{id}>"
       end
 
       def output
@@ -79,13 +78,13 @@ module Jekyll
         unless File.exist?(tempfile)
           FileUtils.mkdir_p(File.dirname(tempfile)) unless File.exist?(File.dirname(tempfile))
           fix_relative_paths
-          File.open(tempfile, 'w') {|f| f.write(to_s) }
+          File.open(tempfile, 'w') { |f| f.write(to_s) }
         end
         @output = tempfile
 
         # store path for cleanup
         site.data[:jekyll_pdf_partials] ||= []
-        site.data[:jekyll_pdf_partials] << "#{self}"
+        site.data[:jekyll_pdf_partials] << to_s
       end
 
       def place_in_layout?
@@ -95,12 +94,12 @@ module Jekyll
       protected
 
       def cache_dir
-        return site.config["pdf"]["cache"] if site.config["pdf"] != nil && site.config["pdf"].has_key?('cache')
+        return site.config['pdf']['cache'] if !site.config['pdf'].nil? && site.config['pdf'].key?('cache')
 
         # Use jekyll-assets cache directory if it exists
-        cache_dir = site.config["assets"]["cache"] || '.asset-cache' if site.config["assets"] != nil
+        cache_dir = site.config['assets']['cache'] || '.asset-cache' unless site.config['assets'].nil?
 
-        File.join(cache_dir || Dir.tmpdir(), 'pdf')
+        File.join(cache_dir || Dir.tmpdir, 'pdf')
       end
 
       # Internal: Generate partial html
@@ -109,23 +108,22 @@ module Jekyll
       #
       # Returns partial html String
       def build_partial(path)
-
         # vars to insert into partial
-        vars = ['frompage','topage','page','webpage','section','subsection','subsubsection']
-        doc.data["pdf"] = {}
-        vars.each { |var| doc.data["pdf"][var] = "<span class='__#{var}'></span>" }
+        vars = %w[frompage topage page webpage section subsection subsubsection]
+        doc.data['pdf'] = {}
+        vars.each { |var| doc.data['pdf'][var] = "<span class='__#{var}'></span>" }
 
         # JavaScript to replace var placeholders with content
         script = "<script>!function(){var t={},n=document.location.search.substring(1).split('&');for(var e in n){var o=n[e].split('=',2);t[o[0]]=decodeURIComponent(o[1])}var n=#{vars};for(var e in n)for(var r=document.getElementsByClassName('__'+n[e]),a=0;a<r.length;++a)r[a].textContent=t[n[e]]}();</script>\n"
 
         # Parse & render
-        content = File.read(File.join("_includes", path))
+        content = File.read(File.join('_includes', path))
 
         # Add replacer script to body
         if content =~ /<\/body>/i
           content[/(<\/body>)/i] = script + content[/(<\/body>)/i]
         else
-          Jekyll.logger.warn  <<-eos
+          Jekyll.logger.warn <<-eos
   Couldn't find <body> in #{path}. Make sure your partial is a properly formatted HTML document (including DOCTYPE) e.g.
 
   <!DOCTYPE html>
@@ -139,18 +137,17 @@ module Jekyll
   </html>
   eos
           # No body found - insert html into default template
-          content = %{<!DOCTYPE html>
+          content = %(<!DOCTYPE html>
   <html>
     <body>
-    #{self.output}
+    #{output}
     #{script}
     </body>
   </html>
-  }
+  )
         end
 
         content
-
       end
     end
   end
