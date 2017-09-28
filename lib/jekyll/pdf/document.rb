@@ -22,7 +22,7 @@ module Jekyll
         data['layout'] = layout
 
         # Get PDF settings from the layouts
-        Jekyll::Utils.deep_merge_hashes!(@settings, getConfig(data))
+        Jekyll::Utils.deep_merge_hashes!(@settings, get_config(data))
 
         PDFKit.configure do |config|
           config.verbose = site.config['verbose']
@@ -38,15 +38,10 @@ module Jekyll
         @partials.each do |partial|
           @settings[partial] = Jekyll::PDF::Partial.new(self, @settings[partial]) unless @settings[partial].nil?
         end
-
-        data.default_proc = proc do |_, key|
-          site.frontmatter_defaults.find(File.join(dir, name), type, key)
-        end
-        Jekyll::Hooks.trigger :pages, :post_init, self
       end
 
       # Recursively merge settings from the page, layout, site config & jekyll-pdf defaults
-      def getConfig(data)
+      def get_config(data)
         settings = data['pdf'].is_a?(Hash) ? data['pdf'] : {}
         layout = @site.layouts[data['layout']].data.clone unless data['layout'].nil?
 
@@ -57,7 +52,7 @@ module Jekyll
         layout['pdf'] ||= {}
         Jekyll::Utils.deep_merge_hashes!(layout['pdf'], settings)
 
-        getConfig(layout)
+        get_config(layout)
       end
 
       # Write the PDF file
