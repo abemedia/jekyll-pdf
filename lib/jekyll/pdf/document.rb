@@ -15,8 +15,8 @@ module Jekyll
         @partials = %w[cover header_html footer_html]
 
         process(@name)
+        @page = page
         self.data = page.data.clone
-        self.content = page.content.clone
 
         # Set layout to the PDF layout
         data['layout'] = layout
@@ -58,7 +58,8 @@ module Jekyll
       # Write the PDF file
       # todo: remove pdfkit dependency
       def write(dest_prefix, _dest_suffix = nil)
-        render(@site.layouts, @site.site_payload) if output.nil?
+        @page.render(@site.layouts, @site.site_payload) if output.nil?
+        self.output = @page.output
 
         path = File.join(dest_prefix, CGI.unescape(url))
         dest = File.dirname(path)
