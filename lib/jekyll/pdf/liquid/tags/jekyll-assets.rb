@@ -43,5 +43,6 @@ begin
   Jekyll::PDF::AssetsTag::AcceptableTags.each do |tag|
     Liquid::Template.register_tag tag, Jekyll::PDF::AssetsTag
   end
-rescue LoadError
+rescue LoadError => e
+  raise unless e.message =~ /jekyll-assets/
 end
